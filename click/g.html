@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #screen {
+        display: block;
+          width: 100%;
+          height: 80vh;
+          text-align: center;
+          user-select: none; /*텍스트를 선택했을 때 클릭 및 드래그로 선택되지 않는다*/
+        }
+        #screen.waiting {
+          background-color: chocolate
+        }
+        #screen.ready {
+          background-color: red;
+          color: white;
+        }
+        #screen.now {
+          background-color: green;
+        }
+        #screen.ready1{
+            background : url('/game-over-glitch.gif');
+            background-size:cover;
+        }
+        
+      </style>
+      <div id="img"><img src="./asdasdasdasdas.png"  alt="" width="100%"height=100></div>
+      </head>
+      
+      <body>
+      <div id="screen" class="waiting">클릭후 초록색이 되면 마우스를 클릭하세요</div>
+      <div id="result"></div>
+      <div id="result1"></div>
+      
+
+      
+      </body>
+      
+      <script>
+        document.addEventListener("DOMContentLoaded", () => {
+        const screen = document.querySelector("#screen");
+        const result = document.querySelector("#result");
+      
+        let startTime; // 시작시간
+        let endTime; // 끝나는 시간
+        let chkTime; // 측정시간
+        let records = []; // 평균 반응 속도 구할 빈 배열
+        let timeoutId; // setTimeout 함수를 담을 변수
+        let flag=false;
+        let cnt=0;
+        
+        screen.addEventListener("click", () => {
+          if (screen.classList.contains("waiting")) {
+            screen.classList.replace("waiting", "ready");
+            screen.textContent = "초록색이 되면 클릭하세요";
+            timeoutId = setTimeout(() => {
+              startTime = new Date();
+              screen.classList.replace("ready", "now");
+              screen.textContent = "클릭 하세요!";
+            }, Math.floor(Math.random() * 1000) +3000);
+          } else if 
+          (screen.classList.contains("ready")) {
+            clearTimeout(timeoutId);
+            screen.textContent = '다시 클릭후 초록색에 눌러주세요 ';
+            screen.classList.replace('ready', 'ready1')   
+          } else if(screen.classList.contains("now")){
+            endTime = new Date();
+            chkTime = endTime - startTime; // 측정시간
+            records.push(chkTime);
+            let Avg = records.reduce((acc, cur) => {return acc+cur}, 0) / records.length; // 평균 반응 속도
+            result.textContent = '현재 : ' + chkTime + " ms"
+            result1.textContent = '평균속도 : ' +Avg
+            screen.classList.replace("now", "waiting");
+            screen.textContent = "클릭해서 시작하세요";
+          }else if(screen.classList.contains("ready1")){
+          clearTimeout(timeoutId);
+          screen.textContent = '다시 클릭후 초록색에 눌러주세요 ';
+            screen.classList.replace('ready1', 'waiting')}  
+        });
+      });
+      </script>
+      </html>
